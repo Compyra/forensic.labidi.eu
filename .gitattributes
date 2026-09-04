@@ -1,0 +1,4 @@
+# Keep the shipped binaries byte-exact: never treat them as text.
+LabidiForensic.exe binary
+LabidiForensic-arm64.exe binary
+*.png binary

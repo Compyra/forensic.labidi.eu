@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabidiForensic · Portable Windows forensics, honest by design</title>
+
+    <script>
+        (function () {
+            var t;
+            try { t = localStorage.getItem("theme"); } catch (e) { }
+            if (t !== "light" && t !== "dark") {
+                t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            }
+            document.documentElement.dataset.theme = t;
+        })();
+    </script>
+
+    <link rel="stylesheet" href="style.css?v=1">
+
+    <meta name="description" content="One portable exe that reads what a Windows machine remembers: every device ever attached, Wi-Fi history, programs run, files opened or deleted, sign-ins. Every run ends by saying what it could not read. No installer, no admin, no network code.">
+    <meta name="author" content="Compyra">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#e8effd" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#030816" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="dark light">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://forensic.labidi.eu/">
+    <meta property="og:site_name" content="LabidiForensic">
+    <meta property="og:title" content="LabidiForensic · Portable Windows forensics, honest by design">
+    <meta property="og:description" content="See what the machine remembers. Know what could not be read. One portable exe: devices ever attached, Wi-Fi history, programs run, files opened or deleted, sign-ins. No installer, no admin, no network code.">
+    <meta property="og:image" content="https://forensic.labidi.eu/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="LabidiForensic: portable Windows forensics">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://forensic.labidi.eu/">
+    <meta property="twitter:title" content="LabidiForensic · Portable Windows forensics, honest by design">
+    <meta property="twitter:description" content="See what the machine remembers. Know what could not be read. One portable exe, no installer, no admin, no network code.">
+    <meta property="twitter:image" content="https://forensic.labidi.eu/og-image.png">
+
+    <link rel="canonical" href="https://forensic.labidi.eu/">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "LabidiForensic",
+      "operatingSystem": "Windows 10, Windows 11",
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "Digital forensics",
+      "softwareVersion": "1.0.0-rc6",
+      "fileSize": "5.9MB",
+      "description": "Portable Windows forensic reader: devices ever attached, wireless networks joined, programs run, files opened or deleted, sign-in history and more, in one dependency-free executable that ends every run by saying what it could not read.",
+      "url": "https://forensic.labidi.eu/",
+      "downloadUrl": "https://forensic.labidi.eu/download/LabidiForensic.exe",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+      "publisher": { "@type": "Organization", "name": "Compyra", "url": "https://compyra.com" }
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Inline SVG icon sprite -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+        <symbol id="i-usb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="8" height="12" rx="2"/><path d="M10 9V4h4v5"/><path d="M11.5 6h.01M13.5 6h-.01"/></symbol>
+        <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 3 3 8 8 8"/><polyline points="12 7 12 12 16 14"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 12 15 2 8.5 12 2"/><polyline points="2 15.5 12 22 22 15.5"/></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    </svg>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <div class="trace-sweep" aria-hidden="true"></div>
+
+    <header id="site-header">
+        <div class="container">
+            <a class="brand" href="#top" aria-label="LabidiForensic, back to top">
+                <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#4fd6ff"/>
+                            <stop offset="1" stop-color="#2b8bff"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="29" fill="#0a1a3f" stroke="#4fd6ff" stroke-opacity=".55" stroke-width="2"/>
+                    <circle cx="32" cy="32" r="21" fill="none" stroke="#4fd6ff" stroke-opacity=".35" stroke-width="2"/>
+                    <circle cx="32" cy="32" r="13" fill="none" stroke="#4fd6ff" stroke-opacity=".25" stroke-width="2"/>
+                    <circle cx="27" cy="27" r="9.5" fill="none" stroke="url(#lens)" stroke-width="3.5"/>
+                    <line x1="34" y1="34" x2="45" y2="45" stroke="url(#lens)" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="27" cy="27" r="3" fill="#4fd6ff"/>
+                    <circle cx="45" cy="19" r="2.4" fill="#ffd166"/>
+                    <circle cx="19" cy="45" r="2.4" fill="#8a6bff"/>
+                </svg>
+                <span class="brand-name">LabidiForensic
+                    <span class="brand-sub">labidi.eu · by Compyra</span>
+                </span>
+            </a>
+
+            <nav aria-label="Primary">
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#cli">Command line</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-controls">
+                <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme" aria-pressed="false">
+                    <svg class="icon theme-icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+                    <svg class="icon theme-icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <!-- ===================== HERO ===================== -->
+        <section class="hero" id="top" aria-labelledby="hero-title">
+            <div class="hero-grid" aria-hidden="true"></div>
+            <div class="hero-glow" aria-hidden="true"></div>
+            <div class="container">
+                <div class="hero-copy">
+                    <p class="hero-eyebrow">Free · Portable · Windows</p>
+                    <h1 id="hero-title">See what it <span class="grad">remembers</span>.<br>Know what could not be <span class="grad">read</span>.</h1>
+                    <p class="hero-sub">
+                        LabidiForensic is one small executable that reads back what a Windows machine
+                        remembers about its own past: every device ever attached, wireless networks joined,
+                        programs run, files opened or deleted, sign-ins, sensor use. And it ends every run
+                        by saying plainly what it could not see.
+                    </p>
+                    <div class="hero-ctas">
+                        <a class="btn btn-primary" href="download/LabidiForensic.exe" download>
+                            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+                            Download for Windows&nbsp;<small>x64 · 5.9 MB</small>
+                        </a>
+                        <a class="btn btn-ghost" href="#features">See what it does</a>
+                    </div>
+                    <p class="hero-meta">
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> No installer</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> No admin required</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> No network code</span>
+                        <span><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg> <a href="#download">SHA-256 verified</a></span>
+                    </p>
+                </div>
+
+                <!-- Stylised replica of the real window -->
+                <div class="window reveal" role="img" aria-label="The LabidiForensic window: areas of machine memory to read, a Collect button, a table of devices the machine remembers with when each was last seen, and a status line showing the access ledger and the equivalent console command.">
+                    <div class="window-titlebar">
+                        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+                            <circle cx="32" cy="32" r="29" fill="#0a1a3f" stroke="#4fd6ff" stroke-opacity=".55" stroke-width="3"/>
+                            <circle cx="27" cy="27" r="9.5" fill="none" stroke="#4fd6ff" stroke-width="4"/>
+                            <line x1="34" y1="34" x2="45" y2="45" stroke="#4fd6ff" stroke-width="5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="window-title">LabidiForensic</span>
+                        <span class="window-lights" aria-hidden="true">&#8211; &#9633; &#10005;</span>
+                    </div>
+                    <div class="window-tabs" aria-hidden="true">
+                        <span>everything (78)</span>
+                        <span class="is-active">devices</span>
+                        <span>networks</span>
+                        <span>runs</span>
+                        <span>files</span>
+                        <span>logons</span>
+                        <span>privacy</span>
+                    </div>
+                    <div class="window-toolbar" aria-hidden="true">
+                        <span class="tool-chip is-primary">Collect</span>
+                        <span class="tool-chip">Find&hellip;</span>
+                        <span class="tool-chip">last 24 hours</span>
+                        <span class="tool-chip">Export report&hellip;</span>
+                        <span class="tool-chip">Bag raw&hellip;</span>
+                        <span class="tool-chip">Weird?</span>
+                    </div>
+                    <div class="window-list" aria-hidden="true">
+                        <div class="window-cols"><span>When</span><span>Device</span><span class="role">Kind</span><span>State</span></div>
+                        <div class="window-row"><span class="path">08-27 09:07</span><span class="path">Kingston DataTraveler 3.0</span><span class="role">usb storage</span><span class="ports">not attached</span></div>
+                        <div class="window-row"><span class="path">08-25 14:12</span><span class="path">WD My Passport 25E1</span><span class="role">usb storage</span><span class="ports">not attached</span></div>
+                        <div class="window-row"><span class="path">08-24 19:03</span><span class="path">JBL Flip 6</span><span class="role">bluetooth</span><span class="ports">paired</span></div>
+                        <div class="window-row"><span class="path">08-22 08:41</span><span class="path">DELL P2419H  serial 7GVXP83</span><span class="role">monitor</span><span class="ports">attached</span></div>
+                        <div class="window-row"><span class="path">08-20 11:26</span><span class="path">HP LaserJet M404</span><span class="role">printer</span><span class="ports">installed</span></div>
+                    </div>
+                    <div class="window-status" aria-hidden="true">
+                        collected: 9 of 11 · denied: 2 (admin would add them) · same as: <code>LabidiForensic.exe devices</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== TRUST STRIP ===================== -->
+        <section class="trust" aria-label="Key numbers">
+            <div class="container">
+                <div class="stat reveal"><b>5.9 MB</b><span>one portable file</span></div>
+                <div class="stat reveal"><b>0</b><span>dependencies, ever</span></div>
+                <div class="stat reveal"><b>78</b><span>collectors, nine areas</span></div>
+                <div class="stat reveal"><b>1</b><span>access ledger, every run</span></div>
+            </div>
+        </section>
+
+        <!-- ===================== FEATURES ===================== -->
+        <section id="features" aria-labelledby="features-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 id="features-title">What a machine remembers</h2>
+                    <p>Double-click the exe and a window opens. Give it any argument and it stays a console
+                       tool. Both faces drive the same engine and the same 78 collectors, and everything
+                       below ships in the one file.</p>
+                </div>
+                <div class="features-grid">
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-usb"></use></svg></div>
+                        <h3>Everything ever attached</h3>
+                        <p>USB sticks and drives, Bluetooth pairings, monitors with their serials, printers:
+                           read from what Windows kept, including devices unplugged long ago, with
+                           first-install and last-removal times.</p>
+                    </article>
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-history"></use></svg></div>
+                        <h3>Where it went, what ran</h3>
+                        <p>Saved Wi-Fi networks and their connect history, programs run with when and how
+                           often, files opened, saved, searched and deleted, sign-ins, camera and microphone
+                           use, and the volatile state that vanishes at reboot.</p>
+                    </article>
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg></div>
+                        <h3>The access ledger</h3>
+                        <p>Absence of evidence is never reported as evidence of absence. Every run ends by
+                           naming what was read, what was refused, and what elevation would add, so the
+                           report cannot lie by omission.</p>
+                    </article>
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-zap"></use></svg></div>
+                        <h3>Is something weird here?</h3>
+                        <p>Rules that work on first contact, and a baseline that adds a &ldquo;new since&rdquo;
+                           layer. The answer never says &ldquo;clean&rdquo;: it says what ran, what matched, and
+                           what could not be read, with the evidence rows behind every finding.</p>
+                    </article>
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"></use></svg></div>
+                        <h3>Stick-first, deadbox-ready</h3>
+                        <p>Run it from a USB stick and reports land on the stick, not the host. Point
+                           <code>-root</code> at a mounted dead volume to read another machine&rsquo;s history, or
+                           bag the raw evidence files with a hashed manifest.</p>
+                    </article>
+                    <article class="feature-card reveal">
+                        <div class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg></div>
+                        <h3>Reads, never manufactures</h3>
+                        <p>No network code, banned by a structural test. It never spawns a process, because
+                           doing so writes the very evidence it came to read. Secrets are reachable and left
+                           alone: it reports a credential exists, never what it is.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== CLI ===================== -->
+        <section id="cli" aria-labelledby="cli-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 id="cli-title">The command line</h2>
+                    <p>Examples use <code>lfr</code> for brevity: rename the exe freely, nothing depends on
+                       the name. No verb takes a path; it examines the machine it runs on, or the dead
+                       volume you point <code>-root</code> at.</p>
+                </div>
+                <div class="cli-wrap">
+                    <div class="terminal reveal">
+                        <div class="terminal-bar"><i></i><i></i><i></i><span>quick taste</span></div>
+                        <pre><span class="p">$</span> lfr                          <span class="c"># every area at once</span>
+<span class="p">$</span> lfr devices                  <span class="c"># everything ever attached</span>
+<span class="p">$</span> lfr all -find kingston       <span class="c"># all it remembers about that stick</span>
+<span class="p">$</span> lfr runs -since 7d           <span class="c"># what executed this week</span>
+<span class="p">$</span> lfr all -f html -out report.html  <span class="c"># one self-contained report</span>
+<span class="p">$</span> lfr collect -raw -out .      <span class="c"># the raw evidence bag, hashed</span>
+<span class="p">$</span> lfr all -root F:\            <span class="c"># deadbox: a mounted dead volume</span></pre>
+                    </div>
+                    <div class="terminal reveal">
+                        <div class="terminal-bar"><i></i><i></i><i></i><span>lfr networks</span></div>
+                        <pre><span class="o">== networks.wlanevents  (WLAN-AutoConfig operational log) ==</span>
+2026-09-01 18:44  <span class="g">connect</span>     HomeNet-5G    bssid=c8:3a:35:&hellip;
+2026-09-01 07:59  disconnect  CoffeeCorner  reason=user
+<span class="c">&hellip;28 saved networks, 117 connect and disconnect events&hellip;</span>
+
+<span class="o">collected: 6 of 9    denied: 3 (admin would add them)</span>
+  networks.profiles    <span class="hl">admin</span>  first-joined and last-connected dates
+  networks.signatures  <span class="hl">admin</span>  gateway MAC per network: where it has been</pre>
+                    </div>
+                </div>
+                <p class="cli-note reveal">
+                    Areas: <code>devices</code> <code>networks</code> <code>runs</code> <code>files</code>
+                    <code>logons</code> <code>system</code> <code>privacy</code> <code>apps</code> <code>live</code>
+                    &nbsp;·&nbsp; Verbs: <code>all</code> <code>report</code> <code>collect</code> <code>weird</code>
+                    <code>baseline</code> <code>prepare</code> <code>version</code>
+                    &nbsp;·&nbsp; Output: table, <code>-f csv</code>, <code>-f json</code> or <code>-f html</code>
+                </p>
+            </div>
+        </section>
+
+        <!-- ===================== DOWNLOAD ===================== -->
+        <section id="download" aria-labelledby="download-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 id="download-title">Download</h2>
+                    <p>Free, no signup. Put the file on a stick and run it: collection writes nothing to the host.</p>
+                </div>
+
+                <div class="download-panel reveal">
+                    <div class="download-main">
+                        <div>
+                            <h3>LabidiForensic</h3>
+                            <p>Version <code>1.0.0-rc6</code> · commit <code>8009c4b</code> · 2026-09-03 · built
+                               with a pinned Go toolchain, the same commit rebuilds to the same bytes.</p>
+                        </div>
+                        <a class="btn btn-primary" href="download/LabidiForensic.exe" download>
+                            <svg class="icon" aria-hidden="true"><use href="#i-download"></use></svg>
+                            Download for Windows&nbsp;<small>x64 · 5.9 MB</small>
+                        </a>
+                    </div>
+
+                    <div class="asset-row">
+                        <div class="asset-name">
+                            <b>Windows x64</b>
+                            <span>LabidiForensic.exe · 5.9 MB · window + CLI</span>
+                        </div>
+                        <span class="asset-hash">
+                            <code title="a277dd90271de704aa4104429d651c1c3539017d0594e6bafe24312a17e22203">a277dd90271de704aa4104429d651c1c&hellip;</code>
+                            <button class="copy-btn" type="button" data-copy="a277dd90271de704aa4104429d651c1c3539017d0594e6bafe24312a17e22203" aria-label="Copy the SHA-256 hash of LabidiForensic.exe">
+                                <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
+                            </button>
+                        </span>
+                        <span class="asset-get">
+                            <a class="btn btn-ghost btn-dl" href="download/LabidiForensic.exe" download>Download</a>
+                        </span>
+                    </div>
+
+                    <div class="asset-row">
+                        <div class="asset-name">
+                            <b>Windows arm64</b>
+                            <span>LabidiForensic-arm64.exe · 5.5 MB · window + CLI</span>
+                        </div>
+                        <span class="asset-hash">
+                            <code title="191417b261f566f2b9506ea835b1f6a31523092b7112c379ac794d943ad262cd">191417b261f566f2b9506ea835b1f6a3&hellip;</code>
+                            <button class="copy-btn" type="button" data-copy="191417b261f566f2b9506ea835b1f6a31523092b7112c379ac794d943ad262cd" aria-label="Copy the SHA-256 hash of LabidiForensic-arm64.exe">
+                                <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
+                            </button>
+                        </span>
+                        <span class="asset-get">
+                            <a class="btn btn-ghost btn-dl" href="download/LabidiForensic-arm64.exe" download>Download</a>
+                        </span>
+                    </div>
+
+                    <div class="verify">
+                        <h4>Verify your download</h4>
+                        <div class="terminal">
+                            <div class="terminal-bar"><i></i><i></i><i></i><span>PowerShell</span></div>
+                            <pre><span class="p">PS&gt;</span> Get-FileHash .\LabidiForensic.exe -Algorithm SHA256
+<span class="o">a277dd90271de704aa4104429d651c1c3539017d0594e6bafe24312a17e22203</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="download-foot">
+                        <span>All hashes: <a href="SHA256SUMS.txt">SHA256SUMS.txt</a></span>
+                        <span>Windows 10 or 11 · nothing else needed</span>
+                        <span>Both builds belong on the stick</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== FAQ ===================== -->
+        <section id="faq" aria-labelledby="faq-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2 id="faq-title">Questions, answered</h2>
+                </div>
+                <div class="faq-list reveal">
+                    <details>
+                        <summary>Windows SmartScreen warns about the download. Why?</summary>
+                        <div class="faq-body">
+                            The binary is not code signed: certificates cost money every year and would not
+                            change what is in the file. Verify the SHA-256 hash against the one published
+                            above, then choose <code>More info</code>, <code>Run anyway</code>. The build is
+                            reproducible from source, so the published hash is checkable end to end, and
+                            copies run from a USB stick or an internal share never see the prompt.
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Do I need administrator rights?</summary>
+                        <div class="faq-body">
+                            No. It runs as a standard user and reports honestly: the access ledger ends
+                            every run naming what was denied and what elevation would add. Measured on
+                            Windows 11, that is things like Wi-Fi first-joined dates, gateway MAC history
+                            and per-user run times. Elevation is never requested; run it elevated when you
+                            want those collectors too.
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Does it send anything anywhere?</summary>
+                        <div class="faq-body">
+                            No. There is no network code in the binary at all: the source enforces a
+                            module-wide ban on Go's <code>net</code> and <code>os/exec</code> packages with a
+                            structural test. It also never spawns a process, because starting one on a
+                            machine under examination writes the very prefetch, shimcache and BAM entries
+                            it came to read.
+                        </div>
+                    </details>
+                    <details>
+                        <summary>What does it write to the machine it examines?</summary>
+                        <div class="faq-body">
+                            Nothing, during collection: reports and the raw evidence bag land beside the
+                            exe, on your stick, and locked hives are copied to the stick to be parsed. The
+                            one named exception is <code>prepare</code>, which turns on Windows'
+                            default-off auditing so a later run has more to read. It is fenced: a warning
+                            first, an explicit <code>-y</code>, admin required, every change capped, and
+                            <code>prepare -undo</code> restores every value from a journal saved before the
+                            first write.
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Can it read a disk from another machine?</summary>
+                        <div class="faq-body">
+                            Yes. Mount the dead volume and pass <code>-root</code>: registry- and file-borne
+                            history is read straight from the dead hives and files. Collectors that need
+                            the live machine are named in the ledger rather than silently skipped, and the
+                            report states which volume the evidence came from, so a deadbox run is never
+                            mistaken for a live one.
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Does it read passwords or Wi-Fi keys?</summary>
+                        <div class="faq-body">
+                            No, deliberately. Wi-Fi keys, browser logins and vault contents are reachable
+                            and are left alone: it reports that a credential exists, its target and its
+                            dates, never the secret itself. That boundary keeps the binary safe to hand to
+                            anyone.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="brand" href="#top">
+                        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+                            <circle cx="32" cy="32" r="29" fill="#0a1a3f" stroke="#4fd6ff" stroke-opacity=".55" stroke-width="2"/>
+                            <circle cx="32" cy="32" r="21" fill="none" stroke="#4fd6ff" stroke-opacity=".35" stroke-width="2"/>
+                            <circle cx="27" cy="27" r="9.5" fill="none" stroke="#4fd6ff" stroke-width="3.5"/>
+                            <line x1="34" y1="34" x2="45" y2="45" stroke="#4fd6ff" stroke-width="4.5" stroke-linecap="round"/>
+                            <circle cx="27" cy="27" r="3" fill="#4fd6ff"/>
+                        </svg>
+                        <span class="brand-name">LabidiForensic</span>
+                    </a>
+                    <p>A small, honest forensic reader: one portable executable that answers what this
+                       machine remembers, says plainly what it could not see, and leaves no trace of
+                       itself.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>This page</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#cli">Command line</a></li>
+                        <li><a href="#download">Download</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Family</h4>
+                    <ul>
+                        <li><a href="https://scanner.labidi.eu/" rel="noopener">Labidi Scanner</a></li>
+                        <li><a href="https://diskanalyzer.labidi.eu/" rel="noopener">Labidi Disk Analyzer</a></li>
+                        <li><a href="https://labidi.eu/" rel="noopener">labidi.eu</a></li>
+                        <li><a href="https://compyra.com/" rel="noopener">compyra.com</a></li>
+                        <li><a href="mailto:contact@compyra.com">contact@compyra.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; <span id="year">2026</span> Compyra · Rami Labidi</span>
+                <span>No cookies, no analytics, no trackers.</span>
+            </div>
+        </div>
+    </footer>
+
+    <noscript>
+        <style>
+            .reveal { opacity: 1; transform: none; }
+        </style>
+    </noscript>
+
+    <script src="script.js?v=1" defer></script>
+</body>
+
+</html>

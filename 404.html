@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 · LabidiForensic</title>
+    <meta name="robots" content="noindex">
+    <script>
+        (function () {
+            var t;
+            try { t = localStorage.getItem("theme"); } catch (e) { }
+            if (t !== "light" && t !== "dark") {
+                t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            }
+            document.documentElement.dataset.theme = t;
+        })();
+    </script>
+    <link rel="stylesheet" href="/style.css?v=1">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#e8effd" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#030816" media="(prefers-color-scheme: dark)">
+</head>
+
+<body>
+    <main class="lost">
+        <div>
+            <h1>404</h1>
+            <p>No artifact at this address: the page never existed, or left no trace.</p>
+            <a class="btn btn-primary" href="/">Back to the download page</a>
+        </div>
+    </main>
+</body>
+
+</html>
